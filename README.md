@@ -10,6 +10,8 @@ Proyecto con aplicaciones de pruebas para practicar con:
 - Observabilidad y monitorización con Prometheus y Grafana o el stack ELK.
 - Etc.
 
+He creado un `docker-compose.yml` para asegurarme de que las aplicaciones pueden funcionar correctamente en un entorno de Kubernetes.
+
 ## 2. Aplicaciones
 
 Todas las aplicaciones levantan un servidor HTTP con Python y Flask y disponen de su correspondiente `Dockerfile`. Cada una tiene una funcionalidad distinta, pensada para probar distintas características de un entorno con Kubernetes.
