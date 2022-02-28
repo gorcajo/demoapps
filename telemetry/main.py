@@ -32,10 +32,8 @@ def after_request(response: Response) -> Response:
 @app.errorhandler(Exception)
 def handle_exceptions(e) -> Response:
     if isinstance(e, NotFound):
-        logging.error('Returning HTTP 404')
         return Response(status=404, response=json.dumps({'error': 'HTTP 404 Not Found'}), content_type='application/json')
     elif isinstance(e, MethodNotAllowed):
-        logging.error('Returning HTTP 405')
         return Response(status=405, response=json.dumps({'error': 'HTTP 405 Method Not Allowed'}), content_type='application/json')
     else:
         logging.error('Exception!', e)
@@ -44,21 +42,28 @@ def handle_exceptions(e) -> Response:
 
 @app.route('/devices/<device_id>/temperature', methods=['PUT'])
 def put_temperature(device_id: str) -> Response:
-    redis_client.instance().set(device_id, float(request.json['temperature']))
+    temperature = float(request.json['temperature'])
+    logging.info(f'Storing temperature={temperature} in device ID {device_id}')
+    redis_client.instance().set(device_id, temperature)
     return Response(status=204, response='', content_type='application/json')
 
 
 @app.route('/devices/<device_id>/temperature', methods=['GET'])
 def get_temperature(device_id: str) -> Response:
+    logging.info(f'Getting temperature from device ID {device_id}')
     temperature = redis_client.instance().get(device_id)
 
     if temperature is None:
         return Response(status=404, response=json.dumps({'error': f'Device ID {device_id} not found'}), content_type='application/json')
 
-    return Response(status=200, response=json.dumps({'temperature': float(temperature)}), content_type='application/json')
+    temperature = float(temperature)
+    logging.info(f'Gotten temperature {temperature} from device ID {device_id}')
+
+    return Response(status=200, response=json.dumps({'temperature': temperature}), content_type='application/json')
 
 
 @app.route('/devices', methods=['GET'])
 def list_device_ids() -> Response:
     device_ids = [key.decode('utf8') for key in redis_client.instance().keys('*')]
+    logging.info(f'Listing {len(device_ids)} device IDs')
     return Response(status=200, response=json.dumps(device_ids), content_type='application/json')

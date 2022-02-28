@@ -16,6 +16,9 @@ logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
+MIN_NUM = 1
+MAX_NUM = 1000
+
 
 @app.before_request
 def before_request() -> Response:
@@ -31,10 +34,8 @@ def after_request(response: Response) -> Response:
 @app.errorhandler(Exception)
 def handle_exceptions(e) -> Response:
     if isinstance(e, NotFound):
-        logging.error('Returning HTTP 404')
         return Response(status=404, response=json.dumps({'error': 'HTTP 404 Not Found'}), content_type='application/json')
     elif isinstance(e, MethodNotAllowed):
-        logging.error('Returning HTTP 405')
         return Response(status=405, response=json.dumps({'error': 'HTTP 405 Method Not Allowed'}), content_type='application/json')
     else:
         logging.error('Exception!', e)
@@ -43,5 +44,6 @@ def handle_exceptions(e) -> Response:
 
 @app.route('/number', methods=['GET'])
 def get_random_number() -> Response:
-    number = random.randint(1, 1000)
+    number = random.randint(MIN_NUM, MAX_NUM)
+    logging.info(f'Generated number between {MIN_NUM} and {MAX_NUM}: {number}')
     return Response(status=200, response=json.dumps({'number': number}), content_type='application/json')

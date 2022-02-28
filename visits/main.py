@@ -33,10 +33,8 @@ def after_request(response: Response) -> Response:
 @app.errorhandler(Exception)
 def handle_exceptions(e) -> Response:
     if isinstance(e, NotFound):
-        logging.error('Returning HTTP 404')
         return Response(status=404, response=json.dumps({'error': 'HTTP 404 Not Found'}), content_type='application/json')
     elif isinstance(e, MethodNotAllowed):
-        logging.error('Returning HTTP 405')
         return Response(status=405, response=json.dumps({'error': 'HTTP 405 Method Not Allowed'}), content_type='application/json')
     else:
         logging.error('Exception!', e)
@@ -44,10 +42,11 @@ def handle_exceptions(e) -> Response:
 
 
 @app.route('/count', methods=['GET'])
-def get_random_number() -> Response:
+def get_count() -> Response:
     count = get_visit_count()
     count += 1
     store_visit_count(count)
+    logging.info(f'Returning visit count: {count}')
     return Response(status=200, response=json.dumps({'visit-count': count}), content_type='application/json')
 
 

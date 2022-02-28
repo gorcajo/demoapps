@@ -31,10 +31,8 @@ def after_request(response: Response) -> Response:
 @app.errorhandler(Exception)
 def handle_exceptions(e) -> Response:
     if isinstance(e, NotFound):
-        logging.error('Returning HTTP 404')
         return Response(status=404, response=json.dumps({'error': 'HTTP 404 Not Found'}), content_type='application/json')
     elif isinstance(e, MethodNotAllowed):
-        logging.error('Returning HTTP 405')
         return Response(status=405, response=json.dumps({'error': 'HTTP 405 Method Not Allowed'}), content_type='application/json')
     else:
         logging.error('Exception!', e)
@@ -43,6 +41,10 @@ def handle_exceptions(e) -> Response:
 
 @app.route('/envvars', methods=['GET'])
 def get_environment_variables() -> Response:
+    logging.info('Getting environment variables')
     keys = list(os.environ.keys())
+
+    logging.info('Getting environment variables values')
     envvars = {key: os.environ[key] for key in keys}
+
     return Response(status=200, response=json.dumps(envvars, sort_keys=True), content_type='application/json')
