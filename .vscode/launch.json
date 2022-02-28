@@ -27,6 +27,20 @@
                 "FLASK_ENV": "development"
             },
             "args": ["run", "--port=8080"]
+        },
+        {
+            "name": "Telemetry",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "cwd": "${workspaceRoot}/telemetry",
+            "env": {
+                "FLASK_APP": "main",
+                "FLASK_ENV": "development",
+                "REDIS_HOST": "localhost",
+                "REDIS_PORT": "6379"
+            },
+            "args": ["run", "--port=8080"]
         }
     ]
 }
