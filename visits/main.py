@@ -1,11 +1,9 @@
 import json
 import logging
-import random
+import os
 
 from flask import Flask, Response, request
 from werkzeug.exceptions import NotFound, MethodNotAllowed
-
-import config
 
 
 logging.basicConfig(
@@ -15,6 +13,8 @@ logging.basicConfig(
 
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
+
+VISITS_FILE = '/tmp/visits.txt'
 
 app = Flask(__name__)
 
@@ -43,9 +43,23 @@ def handle_exceptions(e) -> Response:
         return Response(status=500, response=json.dumps({'error': 'HTTP 500 Internal Server Error'}), content_type='application/json')
 
 
-@app.route('/number', methods=['GET'])
+@app.route('/count', methods=['GET'])
 def get_random_number() -> Response:
-    min_number = config.get('min')
-    max_number = config.get('max')
-    number = random.randint(min_number, max_number)
-    return Response(status=200, response=json.dumps({'number': number}), content_type='application/json')
+    count = get_visit_count()
+    count += 1
+    store_visit_count(count)
+    return Response(status=200, response=json.dumps({'visit-count': count}), content_type='application/json')
+
+
+def get_visit_count() -> int:
+    if not os.path.isfile(VISITS_FILE):
+        with open(VISITS_FILE, 'w') as visits_file:
+            visits_file.write('0')
+
+    with open(VISITS_FILE, 'r') as visits_file:
+        return int(visits_file.read())
+
+
+def store_visit_count(new_visit_count: int) -> int:
+    with open(VISITS_FILE, 'w') as visits_file:
+        visits_file.write(str(new_visit_count))
