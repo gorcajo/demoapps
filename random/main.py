@@ -1,11 +1,10 @@
 import json
 import logging
+import os
 import random
 
 from flask import Flask, Response, request
 from werkzeug.exceptions import NotFound, MethodNotAllowed
-
-import config
 
 
 logging.basicConfig(
@@ -17,6 +16,15 @@ logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 
 app = Flask(__name__)
+
+DEFAULTS = {
+    'min': 1,
+    'max': 1000,
+}
+
+
+def get_config(key: str) -> int:
+    return int(os.getenv(key.upper(), DEFAULTS[key]))
 
 
 @app.before_request
@@ -45,7 +53,7 @@ def handle_exceptions(e) -> Response:
 
 @app.route('/number', methods=['GET'])
 def get_random_number() -> Response:
-    min_number = config.get('min')
-    max_number = config.get('max')
+    min_number = get_config('min')
+    max_number = get_config('max')
     number = random.randint(min_number, max_number)
     return Response(status=200, response=json.dumps({'number': number}), content_type='application/json')
