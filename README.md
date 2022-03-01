@@ -40,10 +40,19 @@ Esta aplicación tiene tres endpoints:
 
 Es una aplicación pensada para levantar otros servicios y lograr comunicarlos entre sí. En este caso se requiere un Redis, el cual podría ser a su vez configurado para persistir los datos. Es un caso sencillo pero es muy similar a la forma de interactuar con un RDBMS.
 
-## 3. Mejoras futuras
+## 3. Cosas que pueden probarse sin necesidad de código fuente
 
-- Proceso batch, para probar los CronJobs.
+- Jobs y CronJobs: Estos recursos de Kubernetes ofrecen la posibilidad de utilizar una imagen base y especificar comandos en Bash.
+- Aplicaciones externas:
+  - De infraestructura: Prometheus, Grafana, ArgoCD, ElasticSearch, Kibana, Logstash...
+  - De bases de datos: PostgreSQL, MongoDB, Redis, InfluxDB...
+  - De mensajería: Mosquitto (MQTT), RabbitMQ...
+- Motores serverless, como Kubeless.
+- Helm.
+
+## 4. Mejoras futuras
+
+- Aplicación que tarde un rato en arrancar y que aleatoriamente produzca un fallo y se cierre. Debe ser compatible con readiness y liveness probes.
 - Aplicación que genere muchas métricas para ser ingestadas por otras aplicaciones de infraestructura.
 - Aplicación que llame a aplicaciones externas, para probar patrones de kubernetes, VPNs, o lo que sea.
-- Compatibilidad de todas las aplicaciones con readiness y liveness probes.
 - Traducir este readme al inglés...
