@@ -1,58 +1,59 @@
 # DemoApps
 
-## 1. Descripción
+## 1. Description
 
-Proyecto con aplicaciones de pruebas para practicar con:
+This project holds test applications for practicing with:
 
-- Recursos de Kubernetes.
-- Patrones de Kubernetes.
-- Balanecadores de carga o aplicaciones como HA Proxy o Nginx.
-- Observabilidad y monitorización con Prometheus y Grafana o el stack ELK.
+- Kubernetes resources.
+- Kubernetes patterns.
+- Observability and monitorization.
+- Industry standard applications.
 - Etc.
 
-He creado un `docker-compose.yml` para asegurarme de que las aplicaciones pueden funcionar correctamente en un entorno de Kubernetes.
+I created a `docker-compose.yml` to make sure all the applications works correctly in a Kubernetes environment.
 
-## 2. Aplicaciones
+## 2. Applications
 
-Todas las aplicaciones levantan un servidor HTTP con Python y Flask y disponen de su correspondiente `Dockerfile`. Cada una tiene una funcionalidad distinta, pensada para probar distintas características de un entorno con Kubernetes.
+All the applications runs an HTTP web server with Python and Flask, and all of them have a Dockerfile. Each one has one functionality intended to test different characteristics in a Kuberbetes environment.
 
 ### 2.1. Random
 
-Mediante un `GET /number` se obtiene un número aleatorio entre `1` y `1000`. Es la aplicación más sencilla de todas, pensada para probar los recusos básicos de Kubernetes como Pods, Services, Deployments, ReplicaSets...
+With `GET /number` you'll get a random number between `1` and `1000`. This is the simplest application of all, with it you can test basic Kubernetes resources like Pods, Services, Deployments, ReplicaSets...
 
-A la llamada podemos agregarle el parámetro `delay` en la query string, por ejemplo `GET /number?delay=10`. Con ello indicamos el retardo en segundos que queremos que tenga la respuesta. Es útil para simular tiempo de proceso y probar por ejemplo balanceadores de carga.
+You can add to the REST call the query parameter `delay`, i.e. `GET /number?delay=10`. With that you specify the delay in seconds for the response. Useful to simulate process time.
 
 ### 2.2. EnvInspector
 
-El endpoint `GET /envvars` devuelve un JSON con todas las variables de entorno visibles por la aplicación. La utilidad de esta aplicación puede ser probar los ConfigMaps y Secrets.
+The endpoint `GET /envvars` will return a JSON with all environment variables that are visible by the application, useful to test ConfigMaps y Secrets.
 
 ### 2.3. Visits
 
-Realizando una llamada a `GET /count` se incrementa un contador de visitas y se devuelve por el body de la respuesta. El contador se almacena en disco, en la ruta `/tmp/visits.txt`, por lo que esta aplicación puede ser útil para probar los PersistentVolumes y los PersistentVolumeClaims.
+With a call to `GET /count` a counter will be incremented and returned in the response body. This counter is stored in disk at `/tmp/visits.txt`, so this application could be used to test PersistentVolumes y los PersistentVolumeClaims.
 
 ### 2.4. Telemetry
 
-Esta aplicación tiene tres endpoints:
+This application has the following endpoints:
 
-- `PUT /devices/{id}/temperature`: Requiere la cabecera `Content-Type: application/json` y un body similar a `{"temperature": 25.6}`. De esta manera, se almacenará en Redis la temperatura indicada en el body en la clave correspondiente al `id` del dispositivo, en el path de la petición.
-- `GET /devices/{id}/temperature`: Se obtiene la temperatura almacenada en Redis, con la clave indicada en la `id` del path de la petición.
-- `GET /devices`: Lista todas las IDs de los dispositivos almacenados en Redis.
+- `PUT /devices/{id}/temperature`: Requires the header `Content-Type: application/json` and a body like `{"temperature": 25.6}`. The specified temperature will be stored in Redis with the key corresponding to the device ID in the path. If that device ID don't exists, it will be created.
+- `GET /devices/{id}/temperature`: The temperature for that device ID will be returned, obteined from Redis.
+- `GET /devices`: Lists all the device IDs stored in Redis.
 
-Es una aplicación pensada para levantar otros servicios y lograr comunicarlos entre sí. En este caso se requiere un Redis, el cual podría ser a su vez configurado para persistir los datos. Es un caso sencillo pero es muy similar a la forma de interactuar con un RDBMS.
+This is an application intended to communicate to other services, Redis in this case (which you can configure as you please, with or without persistence). This is a simple case but very similar to the way an application interacts with an RDBMS for example.
 
-## 3. Cosas que pueden probarse sin necesidad de código fuente
+## 3. Other things you can test
 
-- Jobs y CronJobs: Estos recursos de Kubernetes ofrecen la posibilidad de utilizar una imagen base y especificar comandos en Bash.
-- Aplicaciones externas:
-  - De infraestructura: Prometheus, Grafana, ArgoCD, ElasticSearch, Kibana, Logstash...
-  - De bases de datos: PostgreSQL, MongoDB, Redis, InfluxDB...
-  - De mensajería: Mosquitto (MQTT), RabbitMQ...
-- Motores serverless, como Kubeless.
+- Jobs and CronJobs: These Kubernetes resources can use Bash commands with a base image in their definition. A simple `echo` command could be enough to test them, you don't need any other application.
+- Industry standard applications:
+  - Infrastructure: Prometheus, Grafana, ArgoCD, ElasticSearch, Kibana, Logstash...
+  - Data: Redis, PostgreSQL, MongoDB, InfluxDB...
+  - Messaging: Mosquitto (MQTT), RabbitMQ...
+  - Load balancers and web servers: HAProxy, Nginx, Apache...
+- Serverless engines like Kubeless.
 - Helm.
 
-## 4. Mejoras futuras
+## 4. To-do list
 
-- Aplicación que tarde un rato en arrancar y que aleatoriamente produzca un fallo y se cierre. Debe ser compatible con readiness y liveness probes.
-- Aplicación que genere muchas métricas para ser ingestadas por otras aplicaciones de infraestructura.
-- Aplicación que llame a aplicaciones externas, para probar patrones de kubernetes, VPNs, o lo que sea.
-- Traducir este readme al inglés...
+- An application that take some time to startup and randomly crashes. It must be compatible with readiness and liveness probes.
+- An application to generate a lot of metrics to be read by other applications.
+- Two twin applications: one will produce messages to RabbitMQ, the other will consume them and persist the data in PostgreSQL.
+- An application to call external APIs to test Kubernetes patterns, VPNs, etc.
