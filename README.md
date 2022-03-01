@@ -44,17 +44,17 @@ This is an application intended to communicate to other services, Redis in this 
 
 - Jobs and CronJobs: These Kubernetes resources can use Bash commands with a base image in their definition. A simple `echo` command could be enough to test them, you don't need any other application.
 - Industry standard applications:
+  - A Docker registry like Harbor.
   - Infrastructure: Prometheus, Grafana, ArgoCD, ElasticSearch, Kibana, Logstash...
   - Data: Redis, PostgreSQL, MongoDB, InfluxDB...
   - Messaging: Mosquitto (MQTT), RabbitMQ...
   - Load balancers and web servers: HAProxy, Nginx, Apache...
 - Serverless engines like Kubeless.
 - Helm.
+- Etc.
 
-## 4. To-do list
+## 4. To-do applications
 
-- An application that consumes huge amounts of RAM or CPU on request. It could be used to test memory or CPU limits and node placement.
-- An application that take some time to startup and randomly crashes. It must be compatible with readiness and liveness probes.
-- An application to generate a lot of metrics to be read by other applications.
-- Two twin applications: one will produce messages to RabbitMQ, the other will consume them and persist the data in PostgreSQL.
+- An application that consumes large amounts of RAM, or large amounts CPU or crashes, everything through REST calls. It takes some time to start and must be compatible with readiness and liveness probes.
+- An application that generates a lot of metrics to be ingested by other applications.
 - An application to call external APIs to test Kubernetes patterns, VPNs, etc.
