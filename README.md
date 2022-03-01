@@ -18,7 +18,9 @@ Todas las aplicaciones levantan un servidor HTTP con Python y Flask y disponen d
 
 ### 2.1. Random
 
-Mediante un `GET /number` se obtiene un número aleatorio entre `1` y `1000`. Es la aplicación más sencilla de todas, pensada para probar los recusos básicos de Kubernetes como Pods, Services, Deployments, RecplicaSets...
+Mediante un `GET /number` se obtiene un número aleatorio entre `1` y `1000`. Es la aplicación más sencilla de todas, pensada para probar los recusos básicos de Kubernetes como Pods, Services, Deployments, ReplicaSets...
+
+A la llamada podemos agregarle el parámetro `delay` en la query string, por ejemplo `GET /number?delay=10`. Con ello indicamos el retardo en segundos que queremos que tenga la respuesta. Es útil para simular tiempo de proceso y probar por ejemplo balanceadores de carga.
 
 ### 2.2. EnvInspector
 
@@ -41,7 +43,6 @@ Es una aplicación pensada para levantar otros servicios y lograr comunicarlos e
 ## 3. Mejoras futuras
 
 - Proceso batch, para probar los CronJobs.
-- Aplicación cuyas peticiones tarden un tiempo no despreciable de proceso, para probar balanceadores de carga.
 - Aplicación que genere muchas métricas para ser ingestadas por otras aplicaciones de infraestructura.
 - Aplicación que llame a aplicaciones externas, para probar patrones de kubernetes, VPNs, o lo que sea.
 - Compatibilidad de todas las aplicaciones con readiness y liveness probes.

@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+import time
 
 from flask import Flask, Response, request
 from werkzeug.exceptions import NotFound, MethodNotAllowed
@@ -44,6 +45,19 @@ def handle_exceptions(e) -> Response:
 
 @app.route('/number', methods=['GET'])
 def get_random_number() -> Response:
+    delay = request.args.get('delay')
+
+    if delay is not None:
+        try:
+            delay = int(delay)
+        except ValueError:
+            return Response(status=400, response=json.dumps({'error': 'delay must be an integer'}), content_type='application/json')
+    
+        if delay < 0:
+            return Response(status=400, response=json.dumps({'error': 'delay must be a non-negative integer'}), content_type='application/json')
+
+        time.sleep(delay)
+
     number = random.randint(MIN_NUM, MAX_NUM)
     logging.info(f'Generated number between {MIN_NUM} and {MAX_NUM}: {number}')
     return Response(status=200, response=json.dumps({'number': number}), content_type='application/json')
