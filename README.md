@@ -53,6 +53,7 @@ This is an application intended to communicate to other services, Redis in this 
 
 ## 4. To-do list
 
+- An application that consumes huge amounts of RAM or CPU on request. It could be used to test memory or CPU limits and node placement.
 - An application that take some time to startup and randomly crashes. It must be compatible with readiness and liveness probes.
 - An application to generate a lot of metrics to be read by other applications.
 - Two twin applications: one will produce messages to RabbitMQ, the other will consume them and persist the data in PostgreSQL.
