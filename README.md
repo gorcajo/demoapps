@@ -28,7 +28,7 @@ The endpoint `GET /envvars` will return a JSON with all environment variables th
 
 ### 2.3. Visits
 
-With a call to `GET /count` a counter will be incremented and returned in the response body. This counter is stored in disk at `/tmp/visits.txt`, so this application could be used to test PersistentVolumes and PersistentVolumeClaims.
+With a call to `GET /count` a counter will be incremented and returned in the response body. This counter is stored in disk at `/tmp/visits.txt`, so this application could be used to test PersistentVolumes and PersistentVolumeClaims. Also, it can be used to test InitContainers, initializing the file with an initial visit count. 
 
 ### 2.4. Telemetry
 
@@ -43,7 +43,7 @@ This is an application intended to communicate to other services, Redis in this 
 ## 3. To-Do
 
 - An application that starts and ends, to test Jobs and CronJobs.
-- An application that consumes large amounts of RAM, or large amounts CPU or crashes, everything through REST calls. It takes some time to start and must be compatible with readiness and liveness probes.
-- An application that only reads a text file, to test Sidecar or InitContainer patterns.
+- An application that takes some time to start and through REST calls you can make fail readiness or livenes probes.
+- An application that consumes large amounts of RAM, or large amounts CPU or crashes, everything through REST calls.
 - An application that generates metrics, to Prometheus to scrape them.
-- An application to call external APIs (<https://wttr.in/:help>, <https://jsonplaceholder.typicode.com/>) to test NetworkPolicy and certain Kubernetes Patterns.
+- An application to call external APIs (<https://wttr.in/:help>, <https://jsonplaceholder.typicode.com/>) to test NetworkPolicy and certain Kubernetes Patterns like Adapter or Ambassador.
