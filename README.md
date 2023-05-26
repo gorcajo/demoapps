@@ -10,7 +10,7 @@ This project holds test applications for practicing with:
 - Industry standard applications.
 - Etc.
 
-I created a `docker-compose.yml` to make sure all the applications works correctly in a Kubernetes environment.
+I created a `docker-compose.yml` to make sure all the applications works correctly in a containerized environment.
 
 ## 2. Applications
 
@@ -24,11 +24,11 @@ You can add to the REST call the query parameter `delay`, i.e. `GET /number?dela
 
 ### 2.2. EnvInspector
 
-The endpoint `GET /envvars` will return a JSON with all environment variables that are visible by the application, useful to test ConfigMaps y Secrets.
+The endpoint `GET /envvars` will return a JSON with all environment variables that are visible by the application, useful to test ConfigMaps and Secrets.
 
 ### 2.3. Visits
 
-With a call to `GET /count` a counter will be incremented and returned in the response body. This counter is stored in disk at `/tmp/visits.txt`, so this application could be used to test PersistentVolumes y los PersistentVolumeClaims.
+With a call to `GET /count` a counter will be incremented and returned in the response body. This counter is stored in disk at `/tmp/visits.txt`, so this application could be used to test PersistentVolumes and PersistentVolumeClaims.
 
 ### 2.4. Telemetry
 
@@ -40,21 +40,10 @@ This application has the following endpoints:
 
 This is an application intended to communicate to other services, Redis in this case (which you can configure as you please, with or without persistence). This is a simple case but very similar to the way an application interacts with an RDBMS for example.
 
-## 3. Other things you can test
+## 3. To-Do
 
-- Jobs and CronJobs: These Kubernetes resources can use Bash commands with a base image in their definition. A simple `echo` command could be enough to test them, you don't need any other application.
-- Industry standard applications:
-  - A Docker registry like Harbor.
-  - Infrastructure: Prometheus, Grafana, ArgoCD, ElasticSearch, Kibana, Logstash...
-  - Data: Redis, PostgreSQL, MongoDB, InfluxDB...
-  - Messaging: Mosquitto (MQTT), RabbitMQ...
-  - Load balancers and web servers: HAProxy, Nginx, Apache...
-- Serverless engines like Kubeless.
-- Helm.
-- Etc.
-
-## 4. To-do applications
-
+- An application that starts and ends, to test Jobs and CronJobs.
 - An application that consumes large amounts of RAM, or large amounts CPU or crashes, everything through REST calls. It takes some time to start and must be compatible with readiness and liveness probes.
-- An application that generates a lot of metrics to be ingested by other applications.
-- An application to call external APIs to test Kubernetes patterns, VPNs, etc.
+- An application that only reads a text file, to test Sidecar or InitContainer patterns.
+- An application that generates metrics, to Prometheus to scrape them.
+- An application to call external APIs (<https://wttr.in/:help>, <https://jsonplaceholder.typicode.com/>) to test NetworkPolicy and certain Kubernetes Patterns.
